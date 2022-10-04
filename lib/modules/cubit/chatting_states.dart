@@ -12,9 +12,13 @@ class GetUserDataErrorState extends ChattingStates {}
 
 class ProfileImagePickedSuccessState extends ChattingStates {}
 
+class ProfileImageCroppedSuccessState extends ChattingStates {}
+
 // class ProfileImagePickedErrorState extends ChattingStates {}
 
 class CoverImagePickedSuccessState extends ChattingStates {}
+
+class CoverImageCroppedSuccessState extends ChattingStates {}
 
 // class CoverImagePickedErrorState extends ChattingStates {}
 
@@ -38,5 +42,10 @@ class UpdateCoverSuccessState extends ChattingStates {}
 
 class UpdateCoverErrorState extends ChattingStates {}
 
+class DeleteSuccessState extends ChattingStates {}
+
+class DeleteErrorState extends ChattingStates {}
+
+class ChangeAvatarIndexSuccesState extends ChattingStates {}
 
 

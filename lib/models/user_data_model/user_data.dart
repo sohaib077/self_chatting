@@ -8,6 +8,8 @@ class UserDataModel{
   String ? image ;
   String ? cover ;
   String ? bio ;
+  String ? nickName ;
+  String ? type ;
 
   UserDataModel({
     this.name,
@@ -18,6 +20,8 @@ class UserDataModel{
     this.image,
     this.cover,
     this.bio,
+    this.nickName,
+    this.type,
   }) ;
 
   UserDataModel.fromJson(Map<String , dynamic> json)
@@ -30,6 +34,8 @@ class UserDataModel{
     image = json['image'];
     cover = json['cover'];
     bio = json['bio'];
+    nickName = json['nickName'];
+    type = json['type'];
   }
 
 
@@ -44,6 +50,8 @@ class UserDataModel{
       'image' : image,
       'cover' : cover,
       'bio' : bio,
+      'nickName' : nickName,
+      'type' : type,
     };
   }
 

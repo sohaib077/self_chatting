@@ -15,6 +15,8 @@
 
 //https://newsapi.org/v2/everything?q=business&apiKey=a04cc589f35e4d42b94d806b76685641
 
+import 'package:chatting/modules/login_screen/login_screen.dart';
+
 import '../remote/cache_helper.dart';
 import 'components.dart';
 
@@ -24,8 +26,25 @@ void printFullText(String text){
   pattern.allMatches(text).forEach((element) => print(element.group(0)));
 }
 
+void signOut(context){
+  CasheHelper.removeDate(key: 'uId').then((value){
+    // if(value)
+    // uId = CasheHelper.getData('uId') ?? ' ' ;
+    navigateAndFinish(context, LoginScreen());
+    print('uid after removing is ${CasheHelper.getData('uId')}');
+  });
+}
+
 
 String uId = '';
+String ? profileUrl ;
+String ? coverUrl ;
+
+String ? characterProfileUrl ;
+String ? characterCoverUrl ;
+
+// String  isExist = 'false' ;
+// bool autoValidate = false ;
 
 
 

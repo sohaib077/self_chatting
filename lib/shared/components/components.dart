@@ -1,11 +1,14 @@
 
-
-import 'dart:ffi';
-
+import 'package:chatting/modules/character_cubit/character_cubit.dart';
+import 'package:chatting/modules/cubit/chatting_cubit.dart';
 import 'package:chatting/shared/styles/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:swipe_back_detector/swipe_back_detector.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import '../styles/icon_broken.dart';
+import 'constants.dart';
 
 
 
@@ -26,6 +29,10 @@ Widget underLineTextField({
   Function ? suffixPress ,
   Function  ? validate  ,
   Function  ? onSubmit  ,
+  Function  ? onChange  ,
+  Function  ? onTap  ,
+
+  int  ? maxLength  ,
 
   Color  focusedColor = defaultTealAccent ,
   Color  cursorColor = defaultTealAccent ,
@@ -33,13 +40,17 @@ Widget underLineTextField({
 
   Color  fillColor = defaultWhite ,
   bool  filled = true ,
+  // bool  autoValidate = false ,
   double textSize = 18 ,
   double hintSize = 16 ,
   double prefixSize = 28 ,
   double suffixSize = 24 ,
 
+  bool autoValidate = false ,
+
 }) =>  TextFormField(
 
+autovalidateMode: autoValidate ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
   style: TextStyle(
     color: textStyleColor,
     fontSize: textSize,
@@ -47,13 +58,14 @@ Widget underLineTextField({
     height: 1.3,
   ),
   cursorColor: cursorColor,
+  maxLength: maxLength,
   decoration: InputDecoration(
     // contentPadding: EdgeInsetsDirectional.only(start: -20 , top: 12),
     contentPadding:  EdgeInsets.fromLTRB(12.0, 12.0, -15.0, 7.0),
     fillColor: fillColor.withOpacity(0.65),
     filled: filled,
     prefixIcon: Padding(
-      padding: const EdgeInsets.only(top: 5.0),
+      padding: labelText != null ? const EdgeInsetsDirectional.only(top: 15.0) : const EdgeInsetsDirectional.only(top: 3.0 ,)  ,
       child: Icon(
           prefixIcon,
         color: prefixColor,
@@ -63,10 +75,14 @@ Widget underLineTextField({
     suffixIcon:
     suffix != false?
     IconButton(
-      icon: Icon(
-          suffixIcon,
-        color: suffixColor,
-        size: suffixSize,
+      highlightColor: Colors.transparent,
+      icon: Padding(
+      padding: labelText != null ? const EdgeInsetsDirectional.only(top: 15.0) : const EdgeInsetsDirectional.only(top: 3.0 ,)  ,
+        child: Icon(
+            suffixIcon,
+          color: suffixColor,
+          size: suffixSize,
+        ),
       ),
       onPressed: () => suffixIcon != null ? suffixPress!() : null ,
     ) :
@@ -79,7 +95,7 @@ Widget underLineTextField({
     ),
     labelText: labelText,
     labelStyle: TextStyle(
-          color: labelColor ,
+      color: labelColor ,
       fontWeight: FontWeight.w500,
       fontSize: 20,
       letterSpacing: 1,
@@ -100,7 +116,13 @@ Widget underLineTextField({
   keyboardType: type ,
   controller: controller,
   validator: (value) => validate!(value),
-  // onFieldSubmitted: (value) => onSubmit!(value)  ,
+  onFieldSubmitted: (value) => onSubmit!(value) ?? (){} ,
+  // onEditingComplete: (){
+  //   print('Completed');
+  //   autoValidate = false;
+  // },
+  onChanged: (value) => onChange!(value) ,
+  onTap: () => onTap!() ,
 );
 
 
@@ -149,7 +171,7 @@ Widget defaultTextField({
   // onFieldSubmitted: (value) => onSubmit!()  ,
 );
 
-void navigateTo(BuildContext context, Widget page , {double x = 1.0 , double y = 0.0}) {
+void navigateTo(BuildContext context, Widget page , {double x = 1.0 , double y = 0.0 }) {
   Navigator.push(
     context,
     PageRouteBuilder(
@@ -168,7 +190,10 @@ void navigateTo(BuildContext context, Widget page , {double x = 1.0 , double y =
         );
       },
     ),
-  );
+  ).then((value) {
+    // if(isScrollable)
+    // scrollDown(controller);
+  });
 }
 
 
@@ -195,12 +220,22 @@ void navigateAndFinish(context, widget , {double x = 1.0 , double y = 0.0}) =>
       return false;
     }
     );
-void backArrow(context) => IconButton(
+Widget backArrow(context , {Color iconColor = Colors.white , double iconSize = 30 , bool isLastMessage = false}) => IconButton(
   onPressed: (){
+    // if(isLastMessage){
+    //   CharacterCubit.get(context).getLastMessages().then((value){
+    //     // await Future.delayed(Duration(milliseconds: 100));
+    //     Navigator.pop(context);
+    //
+    //   });
+    // }
+    // else
     Navigator.pop(context);
   },
   icon: Icon(
-    Icons.arrow_back_ios,
+    IconBroken.Arrow___Left_2,
+    color: iconColor,
+    size: iconSize,
   ),
 );
 
@@ -238,4 +273,26 @@ Color chooseToastColor(ToastStates state)
 
 
 
+void  scrollDown(controller) async{
+  await Future.delayed(Duration(milliseconds: 50));
+  controller.animateTo(
+    controller.position.maxScrollExtent,
+    duration: Duration(milliseconds: 50),
+    curve: Curves.fastOutSlowIn,
+  );
+}
 
+ Uri ? _url ;
+
+Future<void> _launchUrl(url) async {
+  final _url = Uri.parse(url);
+  if (!await launchUrl(_url)) {
+    throw 'Could not launch $_url';
+  }
+}
+
+Widget statusBar(context) =>
+                        Container(
+                                    height: MediaQuery.of(context).viewPadding.top,
+                                    color: defaultWhite.withOpacity(0.3),
+                                  );

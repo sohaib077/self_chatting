@@ -1,7 +1,12 @@
+// @dart=2.9
+
+import 'package:chatting/modules/character_cubit/character_cubit.dart';
 import 'package:chatting/modules/chatting_layout/chatting_layout.dart';
+import 'package:chatting/modules/create_character_screen/create_character_screen.dart';
 import 'package:chatting/modules/cubit/chatting_cubit.dart';
 import 'package:chatting/modules/home_screen/home_screen.dart';
 import 'package:chatting/modules/login_screen/login_screen.dart';
+import 'package:chatting/modules/users_screen/users_screen.dart';
 import 'package:chatting/shared/bloc_observer.dart';
 import 'package:chatting/shared/components/constants.dart';
 import 'package:chatting/shared/remote/cache_helper.dart';
@@ -23,8 +28,11 @@ void main() async
 
   await Firebase.initializeApp();
 
+  // MyApp() ;
+
   uId = CasheHelper.getData('uId') ?? ' ' ;
   print(uId);
+
 
   BlocOverrides.runZoned(
         () {
@@ -36,15 +44,19 @@ void main() async
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp();
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    uId = CasheHelper.getData('uId') ?? ' ' ;
+    print('$uId from main');
+
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => LoginCubit()),
         BlocProvider(create: (context) => ChattingCubit()..getUserData()),
+        BlocProvider(create: (context) => CharacterCubit()..getCharacters()..getLastMessages()..numberOfChats()),
 
       ],
       child: MaterialApp(
@@ -56,13 +68,17 @@ class MyApp extends StatelessWidget {
                     color: defaultTeal,
                     fontSize: 24,
                     fontFamily: 'schoolBook',
+                    letterSpacing: 1.5,
+                    fontWeight: FontWeight.w600,
                   ),
-                  color: Colors.transparent,
+                  color: defaultWhite,
                   elevation: 0,
                   systemOverlayStyle: SystemUiOverlayStyle(
                     // statusBarColor: defaultTeal,
-                    statusBarColor: Colors.transparent,
+                    statusBarColor: Colors.transparent.withOpacity(0.05),
                     statusBarIconBrightness: Brightness.dark,
+                    statusBarBrightness: Brightness.dark,
+                    systemNavigationBarIconBrightness: Brightness.dark
                   ),
                 ),
               ),
