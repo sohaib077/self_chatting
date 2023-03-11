@@ -21,6 +21,7 @@ import 'modules/login_cubit/states.dart';
 
 void main() async
 {
+  Bloc.observer = MyBlocObserver();
 
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -33,13 +34,13 @@ void main() async
   uId = CasheHelper.getData('uId') ?? ' ' ;
   print(uId);
 
-
-  BlocOverrides.runZoned(
-        () {
-      // Use cubits...
-      runApp( const MyApp() );},
-    blocObserver: MyBlocObserver(),
-  );
+runApp( const MyApp() );
+  // BlocOverrides.runZoned(
+  //       () {
+  //     // Use cubits...
+  //     runApp( const MyApp() );},
+  //   blocObserver: MyBlocObserver(),
+  // );
 
 }
 
