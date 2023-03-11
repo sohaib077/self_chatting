@@ -119,6 +119,7 @@ var scrollController  = ScrollController();
                             backgroundImage:   CachedNetworkImageProvider(
                               // 'https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?size=338&ext=jpg&uid=R61521309&ga=GA1.2.1730070774.1650502465',
                               '${widget.charModel!.image}',
+
                             ),
                           ),
                         ),
