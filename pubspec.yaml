@@ -90,14 +90,14 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_native_splash: ^2.2.10+1
-
-flutter_native_splash:
-  color: "#0e727a"
-  image: assets/images/logo3.png
-  android: true
-  ios: true
-  splashTransition: SplashTransition.slideTransition
+#  flutter_native_splash: ^2.2.19
+#
+#flutter_native_splash:
+#  color: "#0e727a"
+#  image: assets/images/logo3.png
+#  android: true
+#  ios: true
+#  splashTransition: SplashTransition.slideTransition
 
 
   flutter_launcher_icons: "^0.10.0"
