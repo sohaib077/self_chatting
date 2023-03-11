@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatting/modules/character_cubit/character_states.dart';
 import 'package:chatting/modules/cubit/chatting_cubit.dart';
 import 'package:chatting/shared/components/components.dart';
@@ -215,74 +216,7 @@ class UpdateProfileScreen extends StatelessWidget {
                                 showDialog(
                                     context: context,
                                     builder: (context){
-                                      return AlertDialog(
-                                        title: Text(
-                                          'What are personality types !',
-                                          style: TextStyle(
-                                            letterSpacing: 1,
-                                            height: 0,
-                                            fontFamily: 'schoolBook',
-                                            fontSize: screenHeight*0.025,
-                                            fontWeight: FontWeight.w600,
-                                            color: defaultTeal,
-                                            decoration: TextDecoration.underline,
-                                          ),
-                                        ),
-                                        content: RichText(
-                                          text: TextSpan(
-                                            text: 'personality type refers to the psychological classification of different types of individuals.\n\nSocionics divides people into 16 different types, called sociotypes which are:',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w400,
-                                                letterSpacing: 0.5,
-                                                height: 1.25,
-                                                color: Colors.black87,
-                                                fontSize: 12
-                                            ),
-                                            children:  [
-                                              TextSpan(
-                                                text: '\n\n- ESTJ       - ENTJ       - ESFJ       - ENFJ      \n- ISTJ        - ISFJ        - INTJ        - INFJ      \n- ESTP      - ESFP       - ENTP      - ENFP      \n- ISTP       - ISFP        - INTP       - INFP      \n',
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.w400,
-                                                  letterSpacing: 0.5,
-                                                  height: 1.5,
-                                                  color: Colors.black87,
-                                                  fontSize: 14,
-                                                ),
-
-                                              ),
-                                              TextSpan(
-                                                text: '\nYou can know your type from:\n',
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.w400,
-                                                  letterSpacing: 0.5,
-                                                  height: 1.5,
-                                                  color: Colors.black87,
-                                                ),
-
-
-                                              ),
-                                              TextSpan(
-                                                text: ' https://www.16personalities.com/personality-types \n',
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.w300,
-                                                  letterSpacing: 0.5,
-                                                  height: 1.5,
-                                                  color: Colors.blue,
-                                                  fontSize: 10.5,
-                                                  decoration: TextDecoration.underline,
-                                                ),
-                                                recognizer: TapGestureRecognizer()..onTap = () =>_launchUrl(),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        contentPadding: EdgeInsetsDirectional.only(
-                                          start: 30,
-                                          end: 30,
-                                          top: 12,
-                                          bottom: 12,
-                                        ),
-                                      );
+                                      return alertDialog(screenHeight, _launchUrl);
                                     }
                                 );
                               },
@@ -394,7 +328,7 @@ class UpdateProfileScreen extends StatelessWidget {
                                     radius: screenHeight*0.08,
                                     backgroundImage:
                                     ! cubit.isAvatarImage && profileImage == null?
-                                      NetworkImage(
+                                      CachedNetworkImageProvider(
                                     '${ userData!.image}'
                                   ) :
                                      profileImage != null ?
@@ -428,7 +362,7 @@ class UpdateProfileScreen extends StatelessWidget {
                             ),
                             Padding(
                               padding:  EdgeInsetsDirectional.only(
-                                top: screenHeight*0.2,
+                                top: screenHeight*0.22,
                                 start: screenWidth*0.84,
                               ),
                               child: FloatingActionButton(

@@ -40,8 +40,8 @@ class _ChattingLayoutState extends State<ChattingLayout> {
       }
       else {
         showToast(text: 'Connected', state: ToastStates.SUCCESS);
-        setState(() {});
-        setState(() {});
+        // setState(() {});
+        // setState(() {});
       }
 
 
@@ -108,12 +108,9 @@ class _ChattingLayoutState extends State<ChattingLayout> {
                             child: CurvedNavigationBar(
                               index: cubit.currentIndex,
                               items: <Widget>[
-                                Icon(IconBroken.User1,
-                                  size: screenHeight * 0.035,),
-                                Icon(
-                                  IconBroken.Chat, size: screenHeight * 0.035,),
-                                Icon(IconBroken.Profile,
-                                  size: screenHeight * 0.035,),
+                                Icon(IconBroken.User1, size: screenHeight * 0.035,),
+                                Icon(IconBroken.Chat, size: screenHeight * 0.035,),
+                                Icon(IconBroken.Profile, size: screenHeight * 0.035,),
                               ],
                               onTap: (index) {
                                 cubit.changeBottomNav(index);

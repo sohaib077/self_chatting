@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatting/models/character_data_model/character_data.dart';
 import 'package:chatting/modules/cubit/chatting_cubit.dart';
 import 'package:chatting/shared/components/components.dart';
@@ -217,82 +218,7 @@ class UpdateCharacterScreen extends StatelessWidget {
                                   showDialog(
                                       context: context,
                                       builder: (context){
-                                        return AlertDialog(
-                                          title: Text(
-                                            'What are personality types !',
-                                            style: TextStyle(
-                                              letterSpacing: 1,
-                                              height: 0,
-                                              fontFamily: 'schoolBook',
-                                              fontSize: screenHeight*0.025,
-                                              fontWeight: FontWeight.w600,
-                                              color: defaultTeal,
-                                              decoration: TextDecoration.underline,
-                                            ),
-                                          ),
-                                          // content: Text(
-                                          //   'personality type refers to the psychological classification of different types of individuals.\nSocionics divides people into 16 different types, called sociotypes which are;\n- ESTJ - ENTJ - ESFJ - ENFJ \n ISTJ, ISFJ, INTJ, INFJ, ESTP, ESFP, ENTP, ENFP, ISTP, ISFP, INTP & INFP.',
-                                          //   style: TextStyle(
-                                          //     fontWeight: FontWeight.w500,
-                                          //     letterSpacing: 0.5,
-                                          //     height: 1.25,
-                                          //   ),
-                                          // ),
-                                          content: RichText(
-                                            text: TextSpan(
-                                              text: 'personality type refers to the psychological classification of different types of individuals.\n\nSocionics divides people into 16 different types, called sociotypes which are:',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w400,
-                                                  letterSpacing: 0.5,
-                                                  height: 1.25,
-                                                  color: Colors.black87,
-                                                  fontSize: 12
-                                              ),
-                                              children:  [
-                                                TextSpan(
-                                                  text: '\n\n- ESTJ       - ENTJ       - ESFJ       - ENFJ      \n- ISTJ        - ISFJ        - INTJ        - INFJ      \n- ESTP      - ESFP       - ENTP      - ENFP      \n- ISTP       - ISFP        - INTP       - INFP      \n',
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.w400,
-                                                    letterSpacing: 0.5,
-                                                    height: 1.5,
-                                                    color: Colors.black87,
-                                                    fontSize: 14,
-                                                  ),
-
-                                                ),
-                                                TextSpan(
-                                                  text: '\nYou can know your type from:\n',
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.w400,
-                                                    letterSpacing: 0.5,
-                                                    height: 1.5,
-                                                    color: Colors.black87,
-                                                  ),
-
-
-                                                ),
-                                                TextSpan(
-                                                  text: ' https://www.16personalities.com/personality-types \n',
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.w300,
-                                                    letterSpacing: 0.5,
-                                                    height: 1.5,
-                                                    color: Colors.blue,
-                                                    fontSize: 10.5,
-                                                    decoration: TextDecoration.underline,
-                                                  ),
-                                                  recognizer: TapGestureRecognizer()..onTap = () =>_launchUrl(),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          contentPadding: EdgeInsetsDirectional.only(
-                                            start: 30,
-                                            end: 30,
-                                            top: 12,
-                                            bottom: 12,
-                                          ),
-                                        );
+                                        return alertDialog(screenHeight , _launchUrl);
                                       }
                                   );
                                 },
@@ -365,7 +291,7 @@ class UpdateCharacterScreen extends StatelessWidget {
                                 radius: screenHeight*0.08,
                                 backgroundImage:
                                 ! cubit.isAvatarImage && profileImage == null?
-                                    NetworkImage(
+                                    CachedNetworkImageProvider(
                                   // 'https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?size=338&ext=jpg&uid=R61521309&ga=GA1.2.1730070774.1650502465',
                                   '${ charModel!.image}'
                                 ) :
@@ -401,7 +327,8 @@ class UpdateCharacterScreen extends StatelessWidget {
                           ),
                           Padding(
                             padding:  EdgeInsetsDirectional.only(
-                              top: screenHeight*0.2,
+                              top: screenHeight*0.22,
+                              // top: 140,
                               start: screenWidth*0.84,
                             ),
                             child: FloatingActionButton(
@@ -474,6 +401,46 @@ class UpdateCharacterScreen extends StatelessWidget {
   }
 
 
+
+    Widget charItem(index , context ,) => CircleAvatar(
+      radius: MediaQuery.of(context).size.height*0.057,
+      backgroundColor: defaultTealAccent.withOpacity(0.3),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding:  EdgeInsets.symmetric(vertical: MediaQuery.of(context).size.height*0.005),
+            child: InkWell(
+              onTap: (){
+                CharacterCubit.get(context).isAvatarImage = true ;
+                CharacterCubit.get(context).characterProfileImage = null ;
+                CharacterCubit.get(context).changeAvatarIndex(index: index);
+              },
+              radius: MediaQuery.of(context).size.height*0.055,
+              customBorder: CircleBorder(),
+              child: Image(
+                image:AssetImage(
+                'assets/images/characters/char${index+1}.png',
+                // '${ userData!.image}'
+              ),
+                    color: Colors.white,
+                    colorBlendMode: BlendMode.modulate,
+              ),
+            ),
+          ),
+          if(index == CharacterCubit.get(context).avatarIndex && CharacterCubit.get(context).characterProfileImage == null && CharacterCubit.get(context).isAvatarImage )
+          LinearProgressIndicator(
+              color: defaultTealAccent.withOpacity(0.7),
+            backgroundColor: Colors.transparent,
+            minHeight:  MediaQuery.of(context).size.height*0.004,
+            ),
+
+        ],
+      ),
+    );
+}
+
   final Uri _url = Uri.parse('https://www.16personalities.com/free-personality-test');
 
   Future<void> _launchUrl() async {
@@ -481,46 +448,6 @@ class UpdateCharacterScreen extends StatelessWidget {
       throw 'Could not launch $_url';
     }
   }
-
-    Widget charItem(index , context ,) => CircleAvatar(
-                                radius: MediaQuery.of(context).size.height*0.057,
-                                backgroundColor: defaultTealAccent.withOpacity(0.3),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Padding(
-                                      padding:  EdgeInsets.symmetric(vertical: MediaQuery.of(context).size.height*0.005),
-                                      child: InkWell(
-                                        onTap: (){
-                                          CharacterCubit.get(context).isAvatarImage = true ;
-                                          CharacterCubit.get(context).characterProfileImage = null ;
-                                          CharacterCubit.get(context).changeAvatarIndex(index: index);
-                                        },
-                                        radius: MediaQuery.of(context).size.height*0.055,
-                                        customBorder: CircleBorder(),
-                                        child: Image(
-                                          image:AssetImage(
-                                          'assets/images/characters/char${index+1}.png',
-                                          // '${ userData!.image}'
-                                        ),
-                                              color: Colors.white,
-                                              colorBlendMode: BlendMode.modulate,
-                                        ),
-                                      ),
-                                    ),
-                                    if(index == CharacterCubit.get(context).avatarIndex && CharacterCubit.get(context).characterProfileImage == null && CharacterCubit.get(context).isAvatarImage )
-                                    LinearProgressIndicator(
-                                        color: defaultTealAccent.withOpacity(0.7),
-                                      backgroundColor: Colors.transparent,
-                                      minHeight:  MediaQuery.of(context).size.height*0.004,
-                                      ),
-
-                                  ],
-                                ),
-                              );
-
-}
 
 
 

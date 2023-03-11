@@ -45,23 +45,22 @@ dependencies:
   bloc: ^8.0.3
   flutter_bloc: ^8.0.1
   dio: ^4.0.6
-  hexcolor: ^2.0.7
-  shared_preferences: ^2.0.15
-  webview_flutter: ^3.0.4
+  hexcolor: ^3.0.1
+  shared_preferences: ^2.0.17
+  webview_flutter: ^4.0.2
   smooth_page_indicator: ^1.0.0+2
   fluttertoast: ^8.0.9
   carousel_slider: ^4.1.1
 
-  firebase_core: ^1.20.1
-  firebase_auth: ^3.6.3
-  cloud_firestore: ^3.4.4
-  firebase_storage: ^10.3.6
+  firebase_core: ^2.4.1
+  firebase_auth: ^4.2.5
+  cloud_firestore: ^4.3.1
+  firebase_storage: ^11.0.10
 #  firebase_messaging: ^12.0.3
 #  firebase_analytics: ^9.3.2
 #
   image_picker: ^0.8.5+3
   image_cropper: ^3.0.0
-
 
   syncfusion_flutter_sliders: ^20.2.45
   flutter_material_pickers: ^3.1.4+1
@@ -76,6 +75,13 @@ dependencies:
   path_provider: ^2.0.11
 
   internet_connection_checker: ^1.0.0+1
+  full_screen_image_null_safe: ^2.0.0
+  cached_network_image: ^3.2.2
+  audioplayers: ^3.0.1
+
+
+  firebase_auth_web: ^5.2.4
+
 
 
 
@@ -128,6 +134,8 @@ flutter:
   assets:
     - assets/images/
     - assets/images/characters/
+    - assets/sounds/send.mp3
+    - assets/sounds/swipe.mp3
 
   fonts:
     - family: Janna

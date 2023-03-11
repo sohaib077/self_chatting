@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:audioplayers/audioplayers.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatting/models/character_data_model/character_data.dart';
 import 'package:chatting/models/user_data_model/user_data.dart';
 import 'package:chatting/modules/character_cubit/character_cubit.dart';
@@ -19,16 +21,11 @@ import '../../models/message_model/message_model.dart';
 import '../../shared/components/components.dart';
 import '../../shared/components/constants.dart';
 
-
-class ChatDetailsScreen extends StatelessWidget {
+class ChatDetailsScreen extends StatefulWidget {
 
 CharacterDataModel ? charModel ;
 String ? receiverId ;
 UserDataModel ? mainUser ;
-
-var textController  = TextEditingController();
-var scrollController  = ScrollController();
-
 
 
 ChatDetailsScreen(
@@ -36,6 +33,24 @@ ChatDetailsScreen(
     this.receiverId,
     this.mainUser,
     );
+
+  @override
+  State<ChatDetailsScreen> createState() => _ChatDetailsScreenState();
+}
+
+class _ChatDetailsScreenState extends State<ChatDetailsScreen> {
+
+var textController  = TextEditingController();
+var scrollController  = ScrollController();
+// static AudioCache player =  AudioCache();
+
+
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    // scrollDown1(scrollController);
+  }
 
 @override
   @override
@@ -49,7 +64,7 @@ ChatDetailsScreen(
       return Builder(
       builder: (context) {
         if(MediaQuery.of(context).viewInsets.bottom == 0.0)
-          CharacterCubit.get(context).getMessages(receiverId: receiverId,) ;
+          CharacterCubit.get(context).getMessages(receiverId: widget.receiverId,) ;
         // CharacterCubit.get(context).getLastMessages();
 
 
@@ -95,15 +110,15 @@ ChatDetailsScreen(
                     children: [
                       CircleAvatar(
                           backgroundColor: defaultWhite,
-                          radius: MediaQuery.of(context).size.height*0.032,
+                          radius: MediaQuery.of(context).size.height*0.03,
                         child: FullScreenWidget(
                           disposeLevel: DisposeLevel.High,
                           child: CircleAvatar(
                                 backgroundColor: defaultAvatar,
-                            radius: MediaQuery.of(context).size.height*0.03,
-                            backgroundImage:   NetworkImage(
+                            radius: MediaQuery.of(context).size.height*0.028,
+                            backgroundImage:   CachedNetworkImageProvider(
                               // 'https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?size=338&ext=jpg&uid=R61521309&ga=GA1.2.1730070774.1650502465',
-                              '${charModel!.image}',
+                              '${widget.charModel!.image}',
                             ),
                           ),
                         ),
@@ -113,7 +128,7 @@ ChatDetailsScreen(
                         width: MediaQuery.of(context).size.width*0.65 ,
                         child: Text(
                           // 'Sohaib' ,
-                          '${charModel!.name}',
+                          '${widget.charModel!.name}',
                           style: TextStyle(
                             fontFamily: 'schoolBook',
                             fontWeight: FontWeight.w600,
@@ -130,17 +145,17 @@ ChatDetailsScreen(
                     children: [
                       CircleAvatar(
                           backgroundColor: defaultWhite,
-                          radius: MediaQuery.of(context).size.height*0.032,
+                          radius: MediaQuery.of(context).size.height*0.03,
                         child: FullScreenWidget(
                           child: Transform(
                           alignment: Alignment.center,
-                           transform: mainUser!.image!.contains('char') && ! mainUser!.image!.contains('image_cropper')  ? Matrix4.rotationY(pi) : Matrix4.rotationY(0),
+                           transform: widget.mainUser!.image!.contains('char') && ! widget.mainUser!.image!.contains('image_cropper')  ? Matrix4.rotationY(pi) : Matrix4.rotationY(0),
                               child: CircleAvatar(
                                 backgroundColor: defaultAvatar,
-                                radius: MediaQuery.of(context).size.height*0.03,
-                                backgroundImage:   NetworkImage(
+                                radius: MediaQuery.of(context).size.height*0.028,
+                                backgroundImage:   CachedNetworkImageProvider(
                                  // 'https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?size=338&ext=jpg&uid=R61521309&ga=GA1.2.1730070774.1650502465',
-                                 '${mainUser!.image}',
+                                 '${widget.mainUser!.image}',
                                 ),
                             ),
                           ),
@@ -152,7 +167,7 @@ ChatDetailsScreen(
                         width: MediaQuery.of(context).size.width*0.6,
                         child: Text(
                           // 'Sohaib' ,
-                          '${mainUser!.name}',
+                          '${widget.mainUser!.name}',
                           style: TextStyle(
                             fontFamily: 'schoolBook',
                             fontWeight: FontWeight.w600,
@@ -283,7 +298,7 @@ ChatDetailsScreen(
                                           );
                                       }
                                     } ,
-                                      separatorBuilder: (context, index) => SizedBox(height: 15,),
+                                      separatorBuilder: (context, index) => SizedBox(height: 10,),
                                       itemCount: messages.length,
                                       // itemCount: 25,
                                   ),
@@ -304,10 +319,10 @@ ChatDetailsScreen(
                                 padding:  EdgeInsetsDirectional.only(
                                     top: 5.0 ,
                                     bottom: 5.0 ,
-                                    end: screenWidth*0.13,
+                                    end: screenWidth*0.15,
                                 ),
                                 child: Container(
-                                    height: screenHeight*0.25,
+                                    height: screenHeight*0.2,
                                     width: screenWidth,
 
                                 child: Stack(
@@ -371,7 +386,7 @@ ChatDetailsScreen(
                                 start: screenWidth*0.02,
                               ),
                               child: Container(
-                                height: screenHeight*0.25,
+                                height: screenHeight*0.2,
                                 width: screenWidth,
 
                                 child: Stack(
@@ -427,10 +442,11 @@ ChatDetailsScreen(
                             ),
                             if(CharacterCubit.get(context).uploadingMessageImage)
                               Padding(
-                                padding:  EdgeInsetsDirectional.only(start: screenWidth*0.035 ,end: screenWidth*0.19 ,bottom: screenHeight*0.003),
+                                padding:  EdgeInsetsDirectional.only(start: screenWidth*0.034 ,end: screenWidth*0.18 ,bottom: screenHeight*0.003),
                                 child: LinearProgressIndicator(
                                   color: defaultTealAccent,
-                                  backgroundColor: defaultGrey.withOpacity(0.2),
+                                  backgroundColor: Colors.transparent,
+                                  minHeight: screenHeight*0.003,
                                 ),
                               ),
                             Row(
@@ -439,7 +455,7 @@ ChatDetailsScreen(
                               children: [
                                 Expanded(
                                   child: Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                                    padding: const EdgeInsetsDirectional.only(end: 2.0 , bottom: 5),
                                     child: Container(
                                       // height: screenHeight*0.06,
                                       clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -495,7 +511,7 @@ ChatDetailsScreen(
                                             ),
                                           ),
                                           Padding(
-                                            padding:  EdgeInsetsDirectional.only( bottom: screenHeight*0.00 , end: screenWidth*0.01),
+                                            padding:  EdgeInsetsDirectional.only( bottom: screenHeight*0.0 , end: screenWidth*0.01),
                                             child: IconButton(
                                               highlightColor: Colors.transparent,
                                               onPressed: (){
@@ -518,6 +534,7 @@ ChatDetailsScreen(
                                             ),
 
                                             child: MaterialButton(
+                                              enableFeedback: false,
                                               highlightColor: defaultTealAccent.withOpacity(0.5),
                                               shape: RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.circular(5)
@@ -529,7 +546,7 @@ ChatDetailsScreen(
                                                     if (cubit.isMe == true) {
                                                       cubit.sendMessage(
                                                         text: textController.text.trimRight(),
-                                                        receiverId: receiverId,
+                                                        receiverId: widget.receiverId,
                                                         dateTime: DateTime.now().toString(),
                                                       );
                                                     }
@@ -537,18 +554,18 @@ ChatDetailsScreen(
                                                       cubit.sendMessage(
                                                         text: textController.text.trimRight(),
                                                         receiverId: uId,
-                                                        senderId: receiverId,
+                                                        senderId: widget.receiverId,
                                                         dateTime: DateTime.now().toString(),
                                                       );
                                                       print(
-                                                          '$uId \n $receiverId');
+                                                          '$uId \n ${widget.receiverId}');
                                                     }
                                                   }
                                                 }
                                                 else{
                                                   cubit.isMe ?
                                                   cubit.uploadMessageImage(
-                                                      receiverId: receiverId,
+                                                      receiverId: widget.receiverId,
                                                       dateTime: DateTime.now().toString() ,
                                                       text: textController.text.trimRight(),
                                                     senderId: uId,
@@ -556,13 +573,16 @@ ChatDetailsScreen(
                                                   cubit.uploadMessageImage(
                                                       text: textController.text.trimRight(),
                                                       receiverId: uId,
-                                                      senderId: receiverId,
+                                                      senderId: widget.receiverId,
                                                       dateTime: DateTime.now().toString(),
                                                   );
 
                                                   cubit.removeMessageImage();
                                                 }
                                                 textController = TextEditingController() ;
+                                                AudioPlayer().play(AssetSource('sounds/send.mp3'));
+                                                //                   player.play('sounds/send.mp3');
+
                                               },
                                               child: Icon(
                                                 IconBroken.Send,
@@ -577,18 +597,20 @@ ChatDetailsScreen(
                                   ),
                                 ),
                                 InkWell(
+                                  enableFeedback: false,
                                   onTap: (){
                                     cubit.switchSender();
                                     cubit.switchColor();
-                                    print(cubit.isMe);
+                                    // print(cubit.isMe);
+                                    AudioPlayer().play(AssetSource('sounds/swipe.mp3'));
                                   },
                                   customBorder: CircleBorder(),
                                   highlightColor: Colors.transparent,
-                                  splashColor: defaultTealAccent.withOpacity(0.4),
+                                  // splashColor: defaultTealAccent.withOpacity(0.4),
+                                  splashColor: Colors.transparent,
                                   child: Stack(
                                     alignment: AlignmentDirectional.center,
                                     children: [
-
                                       CircleAvatar(
                                         // radius: screenHeight*0.05,
                                         backgroundColor: Colors.white.withOpacity(0.8),
@@ -601,7 +623,7 @@ ChatDetailsScreen(
                                           Icons.change_circle ,
                                           // color: defaultTealAccent,
                                           color: cubit.color,
-                                          size: screenHeight*0.075,
+                                          size: screenHeight*0.07,
 
                                         ),
                                       ),
@@ -648,13 +670,13 @@ ChatDetailsScreen(
                                               cubit.isMe ?
                                               cubit.sendMessage(
                                                   text: 'Hi',
-                                                  receiverId: receiverId,
+                                                  receiverId: widget.receiverId,
                                                   dateTime: DateTime.now().toString(),
                                               ) :
                                               cubit.sendMessage(
                                                 text: 'Hi',
                                                 receiverId: uId,
-                                                senderId: receiverId,
+                                                senderId: widget.receiverId,
                                                 dateTime: DateTime.now().toString(),
                                               );
                                             } ,
@@ -911,7 +933,7 @@ ChatDetailsScreen(
                                                     if (cubit.isMe == true) {
                                                       cubit.sendMessage(
                                                         text: textController.text.trimRight(),
-                                                        receiverId: receiverId,
+                                                        receiverId: widget.receiverId,
                                                         dateTime: DateTime.now().toString(),
                                                       );
                                                     }
@@ -919,18 +941,18 @@ ChatDetailsScreen(
                                                       cubit.sendMessage(
                                                         text: textController.text.trimRight(),
                                                         receiverId: uId,
-                                                        senderId: receiverId,
+                                                        senderId: widget.receiverId,
                                                         dateTime: DateTime.now().toString(),
                                                       );
                                                       print(
-                                                          '$uId \n $receiverId');
+                                                          '$uId \n ${widget.receiverId}');
                                                     }
                                                   }
                                                 }
                                                 else{
                                                   cubit.isMe ?
                                                   cubit.uploadMessageImage(
-                                                      receiverId: receiverId,
+                                                      receiverId: widget.receiverId,
                                                       dateTime: DateTime.now().toString() ,
                                                       text: textController.text.trimRight(),
                                                     senderId: uId,
@@ -938,7 +960,7 @@ ChatDetailsScreen(
                                                   cubit.uploadMessageImage(
                                                       text: textController.text.trimRight(),
                                                       receiverId: uId,
-                                                      senderId: receiverId,
+                                                      senderId: widget.receiverId,
                                                       dateTime: DateTime.now().toString(),
                                                   );
 
@@ -1004,7 +1026,7 @@ ChatDetailsScreen(
   }
 
   Widget buildMessage(context ,MessageModel  model) => Slidable(
-    
+
     startActionPane:  ActionPane(
       extentRatio: 0.13,
       motion: StretchMotion(),
@@ -1075,7 +1097,7 @@ ChatDetailsScreen(
                         ),
                         onPressed: () {
                           // cubit.deleteCharacter(index , context);
-                          CharacterCubit.get(context).deleteMessages(context ,receiverId: receiverId, date: model.dateTime);
+                          CharacterCubit.get(context).deleteMessages(context ,receiverId: widget.receiverId, date: model.dateTime);
                         },
                         child: Text(
                           'Delete',
@@ -1130,7 +1152,7 @@ ChatDetailsScreen(
                 '${model.text}' ,
                 // 'hello' ,
                 style: TextStyle(
-                  fontSize: MediaQuery.of(context).size.height*0.025,
+                  fontSize: MediaQuery.of(context).size.height*0.022,
                   fontWeight: FontWeight.w600,
                   letterSpacing: 0.5,
                   height: 1.1,
@@ -1142,13 +1164,13 @@ ChatDetailsScreen(
             ),
             Padding(
               padding: const EdgeInsetsDirectional.only(
-                top: 1,
+                top: 2,
                 start: 3,
               ),
               child: Text(
                 '${DateFormat.jm().format(DateTime.parse(model.dateTime!))}',
                 style: Theme.of(context).textTheme.caption!.copyWith(
-                    fontSize: 11,
+                    fontSize: MediaQuery.of(context).size.height*0.011,
                     fontWeight: FontWeight.w600
                 ),
               ),
@@ -1159,6 +1181,7 @@ ChatDetailsScreen(
       ),
     ),
   );
+
   Widget buildMyMessage( context ,MessageModel  model  ) => Slidable(
     endActionPane:  ActionPane(
       extentRatio: 0.13,
@@ -1231,7 +1254,7 @@ ChatDetailsScreen(
                         ),
                         onPressed: () {
                           // cubit.deleteCharacter(index , context);
-                          CharacterCubit.get(context).deleteMessages(context , receiverId: receiverId, date: model.dateTime);
+                          CharacterCubit.get(context).deleteMessages(context , receiverId: widget.receiverId, date: model.dateTime);
                         },
                         child: Text(
                           'Delete',
@@ -1266,7 +1289,7 @@ ChatDetailsScreen(
             padding:  EdgeInsetsDirectional.only(
                 top: MediaQuery.of(context).size.height*0.0015,
                 bottom: MediaQuery.of(context).size.height*0.0015,
-              start: MediaQuery.of(context).size.width*0.2,
+              start: MediaQuery.of(context).size.width*0.25,
 
             ),
             child: Column(
@@ -1292,26 +1315,20 @@ ChatDetailsScreen(
                         '${model.text}' ,
                         // 'Hello bro' ,
                         style: TextStyle(
-                          fontSize: MediaQuery.of(context).size.height*0.025,
+                          fontSize: MediaQuery.of(context).size.height*0.022,
                           fontWeight: FontWeight.w600,
                           letterSpacing: 0.5,
                           height: 1.1,
                           color: Colors.black.withOpacity(0.75),
                         ),
                       ),
-                      // Text(
-                      //   '${model.dateTime!.substring(11 , 16)}',
-                      //   style: Theme.of(context).textTheme.caption!.copyWith(
-                      //     fontSize: 11,
-                      //     fontWeight: FontWeight.w600
-                      //   ),
-                      // ),
+
                     ],
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsetsDirectional.only(
-                    top: 1,
+                    top: 2,
                     end: 3,
                   ),
                   child: Text(
@@ -1319,7 +1336,7 @@ ChatDetailsScreen(
                     // ' ${TimeOfDay.fromDateTime(DateTime.parse(model.dateTime!)).toString().substring(10,15)} ${TimeOfDay.fromDateTime(DateTime.parse(model.dateTime!)).period.toString().substring(10)}',
                     '${DateFormat.jm().format(DateTime.parse(model.dateTime!))}',
                     style: Theme.of(context).textTheme.caption!.copyWith(
-                        fontSize: 11,
+                        fontSize: MediaQuery.of(context).size.height*0.011,
                         fontWeight: FontWeight.w600
                     ),
                   ),
@@ -1406,7 +1423,7 @@ Widget buildMyImageMessage(context , index ,MessageModel model ) => Slidable(
                       ),
                       onPressed: () {
                         // cubit.deleteCharacter(index , context);
-                        CharacterCubit.get(context).deleteMessages(context ,receiverId: receiverId, date: model.dateTime);
+                        CharacterCubit.get(context).deleteMessages(context ,receiverId: widget.receiverId, date: model.dateTime);
                       },
                       child: Text(
                         'Delete',
@@ -1439,12 +1456,11 @@ Widget buildMyImageMessage(context , index ,MessageModel model ) => Slidable(
               padding:  EdgeInsetsDirectional.only(
                 top: MediaQuery.of(context).size.height*0.0015,
                 bottom: MediaQuery.of(context).size.height*0.0015,
-                // start: MediaQuery.of(context).size.width*0.2,
-
+                start: MediaQuery.of(context).size.width*0.25,
               ),
               child:
               Container(
-                height: MediaQuery.of(context).size.height*0.25,
+                // height: MediaQuery.of(context).size.height*0.2,
                 // width: MediaQuery.of(context).size.width,
                 child: Container(
                   clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -1457,18 +1473,20 @@ Widget buildMyImageMessage(context , index ,MessageModel model ) => Slidable(
                   ),
                   child: FullScreenWidget(
                     child:
-                    Image(
-                        image:NetworkImage(
-                          '${model.messageImage}',
-                        ) ,
-                        // fit: BoxFit.fitHeight,
-                        fit: BoxFit.fitWidth,
-                      ) ,
+                    // Image(
+                    //     image:NetworkImage(
+                    //       '${model.messageImage}',
+                    //     ) ,
+                    //     // fit: BoxFit.fitHeight,
+                    //     fit: BoxFit.fitWidth,
+                    //   ) ,
+                  cachedImage(image:  '${model.messageImage}' , height: MediaQuery.of(context).size.height*0.2),
                     ),
                   ),
                 ),
               ),
-            SizedBox(height: 4,),
+            if(! model.text!.trim().isEmpty)
+              SizedBox(height: 4,),
             if(! model.text!.trim().isEmpty)
               Container(
               padding: EdgeInsets.symmetric(
@@ -1487,7 +1505,7 @@ Widget buildMyImageMessage(context , index ,MessageModel model ) => Slidable(
                 '${model.text}' ,
                 // 'loool' ,
                 style: TextStyle(
-                  fontSize: MediaQuery.of(context).size.height*0.025,
+                  fontSize: MediaQuery.of(context).size.height*0.022,
                   fontWeight: FontWeight.w600,
                   letterSpacing: 0.5,
                   height: 1.1,
@@ -1497,13 +1515,13 @@ Widget buildMyImageMessage(context , index ,MessageModel model ) => Slidable(
             ),
             Padding(
               padding: const EdgeInsetsDirectional.only(
-                top: 1,
+                top: 2,
                 end: 3,
               ),
               child: Text(
                 '${DateFormat.jm().format(DateTime.parse(model.dateTime!))}',
                 style: Theme.of(context).textTheme.caption!.copyWith(
-                    fontSize: 11,
+                    fontSize: MediaQuery.of(context).size.height*0.011,
                     fontWeight: FontWeight.w600
                 ),
               ),
@@ -1515,7 +1533,6 @@ Widget buildMyImageMessage(context , index ,MessageModel model ) => Slidable(
     ],
   ),
 );
-
 
 Widget buildImageMessage(context  ,MessageModel model ) => Slidable(
   startActionPane:  ActionPane(
@@ -1589,7 +1606,7 @@ Widget buildImageMessage(context  ,MessageModel model ) => Slidable(
                       ),
                       onPressed: () {
                         // cubit.deleteCharacter(index , context);
-                        CharacterCubit.get(context).deleteMessages(context ,receiverId: receiverId, date: model.dateTime);
+                        CharacterCubit.get(context).deleteMessages(context ,receiverId: widget.receiverId, date: model.dateTime);
                       },
                       child: Text(
                         'Delete',
@@ -1628,11 +1645,12 @@ Widget buildImageMessage(context  ,MessageModel model ) => Slidable(
               padding:  EdgeInsetsDirectional.only(
                 top: MediaQuery.of(context).size.height*0.0015,
                 bottom: MediaQuery.of(context).size.height*0.0015,
+                end: MediaQuery.of(context).size.width*0.25,
               ),
 
               child:
               Container(
-                height: MediaQuery.of(context).size.height*0.25,
+                // height: MediaQuery.of(context).size.height*0.2,
 
                 child: Container(
                   clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -1645,21 +1663,25 @@ Widget buildImageMessage(context  ,MessageModel model ) => Slidable(
                     ),
                   ),
                   child: FullScreenWidget(
-                    child: Image(
-                      image:NetworkImage(
-                        '${model.messageImage}',
-                      ) ,
-                      fit: BoxFit.fitWidth,
-                    ),
+                    child:
+                    // Image(
+                    //   image:NetworkImage(
+                    //     '${model.messageImage}',
+                    //   ) ,
+                    //   fit: BoxFit.fitWidth,
+                    // ),
+                  cachedImage(image:  '${model.messageImage}' , height: MediaQuery.of(context).size.height*0.2),
+
                   ),
                 ),
               ),
             ),
 
-            SizedBox(height: 4,),
+            if(! model.text!.trim().isEmpty)
+              SizedBox(height: 4,),
 
             if(! model.text!.trim().isEmpty)
-            Container(
+              Container(
               padding: EdgeInsets.symmetric(
                 vertical: 6,
                 horizontal: 10,
@@ -1676,7 +1698,7 @@ Widget buildImageMessage(context  ,MessageModel model ) => Slidable(
                 '${model.text}' ,
                 // 'loool' ,
                 style: TextStyle(
-                  fontSize: MediaQuery.of(context).size.height*0.025,
+                  fontSize: MediaQuery.of(context).size.height*0.022,
                   fontWeight: FontWeight.w600,
                   letterSpacing: 0.5,
                   height: 1.1,
@@ -1688,13 +1710,13 @@ Widget buildImageMessage(context  ,MessageModel model ) => Slidable(
             Padding(
 
               padding: const EdgeInsetsDirectional.only(
-                top: 1,
+                top: 2,
                 start: 3,
               ),
               child: Text(
                 '${DateFormat.jm().format(DateTime.parse(model.dateTime!))}',
                 style: Theme.of(context).textTheme.caption!.copyWith(
-                    fontSize: 11,
+                    fontSize: MediaQuery.of(context).size.height*0.011,
                     fontWeight: FontWeight.w600
                 ),
               ),
@@ -1705,7 +1727,4 @@ Widget buildImageMessage(context  ,MessageModel model ) => Slidable(
     ],
   ),
 );
-
-
-
 }

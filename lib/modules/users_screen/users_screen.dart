@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatting/main.dart';
 import 'package:chatting/models/character_data_model/character_data.dart';
 import 'package:chatting/modules/character_cubit/character_cubit.dart';
@@ -48,8 +49,6 @@ class UsersScreen extends StatelessWidget {
           },
 
           child: Scaffold(
-              backgroundColor: Colors.white24.withOpacity(0.2),
-
               floatingActionButton:
               Padding(
                 padding: const EdgeInsetsDirectional.only(
@@ -263,7 +262,7 @@ class UsersScreen extends StatelessWidget {
                   child: CircleAvatar(
                     backgroundColor: defaultAvatar,
                     radius: MediaQuery.of(context).size.height*0.038,
-                    backgroundImage:   NetworkImage(
+                    backgroundImage:   CachedNetworkImageProvider(
                       // 'https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?size=338&ext=jpg&uid=R61521309&ga=GA1.2.1730070774.1650502465',
                       '${charModel.image}',
                     ),

@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatting/modules/character_cubit/character_cubit.dart';
 import 'package:chatting/modules/cubit/chatting_cubit.dart';
 import 'package:chatting/modules/update_profile_screen/update_profile_screen.dart';
@@ -130,7 +131,7 @@ class ProfileScreen extends StatelessWidget {
                                   child: CircleAvatar(
                                   backgroundColor: defaultAvatar,
                                     radius: screenHeight * 0.09,
-                                    backgroundImage: NetworkImage(
+                                    backgroundImage: CachedNetworkImageProvider(
                                       // 'https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?size=338&ext=jpg&uid=R61521309&ga=GA1.2.1730070774.1650502465',
                                       '${ userData.image}',
                                     ),
@@ -217,12 +218,14 @@ class ProfileScreen extends StatelessWidget {
                                     size: screenHeight * 0.04,
                                   ),
                                   SizedBox(height: screenHeight * 0.008,),
-                                  Text(
-                                    'Characters',
-                                    style: TextStyle(
-                                      fontFamily: 'schoolBook',
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: screenHeight * 0.03,
+                                  FittedBox(
+                                    child: Text(
+                                      'Characters',
+                                      style: TextStyle(
+                                        fontFamily: 'schoolBook',
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: screenHeight * 0.03,
+                                      ),
                                     ),
                                   ),
                                   SizedBox(height: screenHeight * 0.015,),
@@ -266,12 +269,16 @@ class ProfileScreen extends StatelessWidget {
                                     size: screenHeight * 0.04,
                                   ),
                                   SizedBox(height: screenHeight * 0.008,),
-                                  Text(
-                                    'Most Chatting',
-                                    style: TextStyle(
-                                      fontFamily: 'schoolBook',
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: screenHeight * 0.027,
+                                  FittedBox(
+                                    child: Text(
+                                      'Most Chatting',
+                                      style: TextStyle(
+                                        fontFamily: 'schoolBook',
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: screenHeight * 0.027,
+                                        height: 1.5
+                                        // fontSize: screenHeight * 0.2,
+                                      ),
                                     ),
                                   ),
                                   SizedBox(height: screenHeight * 0.025,),
@@ -285,7 +292,7 @@ class ProfileScreen extends StatelessWidget {
                                         child: CircleAvatar(
                                           radius: screenHeight*0.025,
                                           backgroundColor: defaultAvatar,
-                                          backgroundImage: NetworkImage(
+                                          backgroundImage: CachedNetworkImageProvider(
                                             CharacterCubit.get(context).mostChatting.image != null?
                                             '${CharacterCubit.get(context).mostChatting.image}':
                                             '${CharacterCubit.get(context).charModel[0].image}',

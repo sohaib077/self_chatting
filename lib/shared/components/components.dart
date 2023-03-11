@@ -1,7 +1,9 @@
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatting/modules/character_cubit/character_cubit.dart';
 import 'package:chatting/modules/cubit/chatting_cubit.dart';
 import 'package:chatting/shared/styles/colors.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:swipe_back_detector/swipe_back_detector.dart';
@@ -277,22 +279,139 @@ void  scrollDown(controller) async{
   await Future.delayed(Duration(milliseconds: 50));
   controller.animateTo(
     controller.position.maxScrollExtent,
-    duration: Duration(milliseconds: 50),
+    duration: Duration(milliseconds: 400),
     curve: Curves.fastOutSlowIn,
   );
 }
 
- Uri ? _url ;
-
-Future<void> _launchUrl(url) async {
-  final _url = Uri.parse(url);
-  if (!await launchUrl(_url)) {
-    throw 'Could not launch $_url';
-  }
+void  scrollDown1(controller) async{
+  await Future.delayed(Duration(milliseconds: 100));
+  controller.animateTo(
+    controller.position.maxScrollExtent+300,
+    duration: Duration(milliseconds: 500),
+    curve: Curves.fastOutSlowIn,
+  );
 }
 
+//  Uri ? _url ;
+//
+// Future<void> _launchUrl(url) async {
+//   final _url = Uri.parse(url);
+//   if (!await launchUrl(_url)) {
+//     throw 'Could not launch $_url';
+//   }
+// }
+
 Widget statusBar(context) =>
-                        Container(
+    Container(
                                     height: MediaQuery.of(context).viewPadding.top,
                                     color: defaultWhite.withOpacity(0.3),
                                   );
+
+
+
+
+Widget cachedImage({
+  required String ? image ,
+  double height = 200 ,
+})=>
+    CachedNetworkImage(
+           imageUrl:  '$image',
+            // placeholder:(context, url) =>  new LinearProgressIndicator(
+            //   color: defaultTealAccent,
+            //   backgroundColor: Colors.transparent,
+            // ),
+            errorWidget: (context, url , error) => new Icon(IconBroken.Info_Square , color: Colors.red,),
+          placeholderFadeInDuration: Duration(milliseconds: 100),
+          fit: BoxFit.fitWidth,
+          height: height ,
+      // width: 200,
+        );
+
+
+
+  // final Uri _url = Uri.parse('https://www.16personalities.com/free-personality-test');
+  //
+  // Future<void> _launchUrl() async {
+  //   if (!await launchUrl(_url)) {
+  //     throw 'Could not launch $_url';
+  //   }
+  // }
+
+
+Widget alertDialog(
+    double screenHeight,
+    Function _launchUrl,
+    // double screenWidth,
+    )=> AlertDialog(
+      title: FittedBox(
+        child: Text(
+          'What are personality types !',
+          style: TextStyle(
+            letterSpacing: 1,
+            height: 0,
+            fontFamily: 'schoolBook',
+            fontSize: screenHeight*0.025,
+            fontWeight: FontWeight.w600,
+            color: defaultTeal,
+            decoration: TextDecoration.underline,
+          ),
+        ),
+      ),
+      content: RichText(
+        text: TextSpan(
+        text: 'personality type refers to the psychological classification of different types of individuals.\n\nSocionics divides people into 16 different types, called sociotypes which are:',
+            style: TextStyle(
+              fontWeight: FontWeight.w400,
+              letterSpacing: 0.5,
+              height: 1.25,
+              color: Colors.black87,
+              // fontSize: 12
+              fontSize: screenHeight*0.0175
+            ),
+          children:  [
+            TextSpan(
+              text: '\n\n- ESTJ       - ENTJ       - ESFJ       - ENFJ      \n- ISTJ        - ISFJ        - INTJ        - INFJ      \n- ESTP      - ESFP       - ENTP      - ENFP      \n- ISTP       - ISFP        - INTP       - INFP      \n',
+              style: TextStyle(
+                fontWeight: FontWeight.w400,
+                letterSpacing: 0.5,
+                height: 1.5,
+                color: Colors.black87,
+                // fontSize: 14,
+                fontSize: screenHeight*0.02
+              ),
+
+            ),
+            TextSpan(
+              text: '\nYou can know your type from:\n',
+              style: TextStyle(
+                fontWeight: FontWeight.w400,
+                letterSpacing: 0.5,
+                height: 1.5,
+                color: Colors.black87,
+              ),
+
+
+            ),
+            TextSpan(
+              text: ' https://www.16personalities.com/personality-types \n',
+              style: TextStyle(
+                fontWeight: FontWeight.w300,
+                letterSpacing: 0.5,
+                height: 1.5,
+                color: Colors.blue,
+                fontSize: 10.5,
+                decoration: TextDecoration.underline,
+              ),
+              recognizer: TapGestureRecognizer()..onTap = () =>_launchUrl(),
+            ),
+          ],
+        ),
+      ),
+      contentPadding: EdgeInsetsDirectional.only(
+        start: 30,
+        end: 30,
+        top: 12,
+        bottom: 12,
+      ),
+    );

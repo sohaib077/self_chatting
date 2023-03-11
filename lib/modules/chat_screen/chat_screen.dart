@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatting/models/character_data_model/character_data.dart';
 import 'package:chatting/modules/character_cubit/character_cubit.dart';
 import 'package:chatting/modules/character_cubit/character_states.dart';
@@ -195,165 +196,177 @@ class _ChatScreenState extends State<ChatScreen> {
                         padding: const EdgeInsetsDirectional.only(
                           top: 0.0,
                         ),
-                        child: ListView.separated(
-                          physics: BouncingScrollPhysics(),
-                          itemBuilder: (context, index) => Column(
-                            children: [
-                              // if(index == 0)
-                              //   SizedBox(height: screenHeight*0.025,),
+                        child: RefreshIndicator(
+                          onRefresh: ()async{
+                            // cubit.getCharacters();
+                            setState(() {});
+                            return Future<void>.delayed(const Duration(seconds: 1));
+                            } ,
+                          backgroundColor: defaultWhite,
+                          color: defaultTealAccent,
+                          // strokeWidth: screenHeight*0.005,
 
-                              Slidable(
-                                  endActionPane: ActionPane(
-                                    extentRatio: 0.5,
-                                    motion: StretchMotion(),
-                                    children: [
-                                      SlidableAction(
-                                        borderRadius: BorderRadius.circular(15),
-                                        icon: IconBroken.Delete,
-                                        backgroundColor: Colors.transparent,
-                                        foregroundColor: Colors.red,
-                                        autoClose: true,
-                                        label: 'Delete Conversation',
-                                        spacing: 10,
 
-                                        onPressed: (BuildContext context) {
-                                          showDialog(
-                                              barrierDismissible: false,
-                                              context: context,
-                                              builder: (context) {
-                                                return AlertDialog(
-                                                  title: Row(
-                                                    children: [
-                                                      Icon(
-                                                        IconBroken.Danger,
-                                                        color: Colors.red,
+                          child: ListView.separated(
+                            physics: BouncingScrollPhysics(),
+                            itemBuilder: (context, index) => Column(
+                              children: [
+                                // if(index == 0)
+                                //   SizedBox(height: screenHeight*0.025,),
+
+                                Slidable(
+                                    endActionPane: ActionPane(
+                                      extentRatio: 0.5,
+                                      motion: StretchMotion(),
+                                      children: [
+                                        SlidableAction(
+                                          borderRadius: BorderRadius.circular(15),
+                                          icon: IconBroken.Delete,
+                                          backgroundColor: Colors.transparent,
+                                          foregroundColor: Colors.red,
+                                          autoClose: true,
+                                          label: 'Delete Conversation',
+                                          spacing: 10,
+
+                                          onPressed: (BuildContext context) {
+                                            showDialog(
+                                                barrierDismissible: false,
+                                                context: context,
+                                                builder: (context) {
+                                                  return AlertDialog(
+                                                    title: Row(
+                                                      children: [
+                                                        Icon(
+                                                          IconBroken.Danger,
+                                                          color: Colors.red,
+                                                        ),
+                                                        SizedBox(
+                                                          width: 5,
+                                                        ),
+                                                        Text(
+                                                          'Take Care',
+                                                          style: TextStyle(
+                                                            letterSpacing: 1,
+                                                            height: 0,
+                                                            fontFamily:
+                                                                'schoolBook',
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    content: Text(
+                                                      'The entire conversation will be deleted.',
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        letterSpacing: 0.5,
+                                                        height: 1.25,
                                                       ),
-                                                      SizedBox(
-                                                        width: 5,
+                                                    ),
+                                                    contentPadding:
+                                                        EdgeInsetsDirectional
+                                                            .only(
+                                                      start: 30,
+                                                      end: 30,
+                                                      top: 12,
+                                                      bottom: 0,
+                                                    ),
+                                                    actionsPadding:
+                                                        EdgeInsetsDirectional
+                                                            .only(
+                                                      // start: 50,
+                                                      end: 30,
+                                                      // top: 12,
+                                                      bottom: 10,
+                                                    ),
+                                                    actions: <Widget>[
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          // cubit.getCharacters();
+                                                          Navigator.pop(
+                                                              context); //close Dialog
+                                                        },
+                                                        child: Text(
+                                                          'Cancel',
+                                                          style: TextStyle(
+                                                            fontSize: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .height *
+                                                                0.03,
+                                                            // color: Colors.red,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                          ),
+                                                        ),
                                                       ),
-                                                      Text(
-                                                        'Take Care',
-                                                        style: TextStyle(
-                                                          letterSpacing: 1,
-                                                          height: 0,
-                                                          fontFamily:
-                                                              'schoolBook',
+                                                      TextButton(
+                                                        style:
+                                                            TextButton.styleFrom(
+                                                                // backgroundColor: Colors.red,
+                                                                foregroundColor:
+                                                                    Colors.red),
+                                                        onPressed: () {
+                                                          cubit.deleteConversation(
+                                                              context,
+                                                              receiverId: cubit
+                                                                  .charId[index]);
+                                                          // CharacterCubit.get(context).deleteMessages(receiverId: receiverId, date: model.dateTime);
+                                                        },
+                                                        child: Column(
+                                                          children: [
+                                                            Text(
+                                                              'Delete',
+                                                              style: TextStyle(
+                                                                fontSize: MediaQuery.of(
+                                                                            context)
+                                                                        .size
+                                                                        .height *
+                                                                    0.03,
+                                                                color: Colors.red,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500,
+                                                              ),
+                                                            ),
+                                                            if (state
+                                                                is DeletingLoadingState)
+                                                              Container(
+                                                                  width:
+                                                                      screenWidth *
+                                                                          0.1,
+                                                                  child:
+                                                                      LinearProgressIndicator(
+                                                                    color:
+                                                                        defaultTealAccent,
+                                                                    minHeight: 3,
+                                                                  ))
+                                                          ],
                                                         ),
                                                       ),
                                                     ],
-                                                  ),
-                                                  content: Text(
-                                                    'The entire conversation will be deleted.',
-                                                    style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                      letterSpacing: 0.5,
-                                                      height: 1.25,
-                                                    ),
-                                                  ),
-                                                  contentPadding:
-                                                      EdgeInsetsDirectional
-                                                          .only(
-                                                    start: 30,
-                                                    end: 30,
-                                                    top: 12,
-                                                    bottom: 0,
-                                                  ),
-                                                  actionsPadding:
-                                                      EdgeInsetsDirectional
-                                                          .only(
-                                                    // start: 50,
-                                                    end: 30,
-                                                    // top: 12,
-                                                    bottom: 10,
-                                                  ),
-                                                  actions: <Widget>[
-                                                    TextButton(
-                                                      onPressed: () {
-                                                        // cubit.getCharacters();
-                                                        Navigator.pop(
-                                                            context); //close Dialog
-                                                      },
-                                                      child: Text(
-                                                        'Cancel',
-                                                        style: TextStyle(
-                                                          fontSize: MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .height *
-                                                              0.03,
-                                                          // color: Colors.red,
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    TextButton(
-                                                      style:
-                                                          TextButton.styleFrom(
-                                                              // backgroundColor: Colors.red,
-                                                              foregroundColor:
-                                                                  Colors.red),
-                                                      onPressed: () {
-                                                        cubit.deleteConversation(
-                                                            context,
-                                                            receiverId: cubit
-                                                                .charId[index]);
-                                                        // CharacterCubit.get(context).deleteMessages(receiverId: receiverId, date: model.dateTime);
-                                                      },
-                                                      child: Column(
-                                                        children: [
-                                                          Text(
-                                                            'Delete',
-                                                            style: TextStyle(
-                                                              fontSize: MediaQuery.of(
-                                                                          context)
-                                                                      .size
-                                                                      .height *
-                                                                  0.03,
-                                                              color: Colors.red,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w500,
-                                                            ),
-                                                          ),
-                                                          if (state
-                                                              is DeletingLoadingState)
-                                                            Container(
-                                                                width:
-                                                                    screenWidth *
-                                                                        0.1,
-                                                                child:
-                                                                    LinearProgressIndicator(
-                                                                  color:
-                                                                      defaultTealAccent,
-                                                                  minHeight: 3,
-                                                                ))
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ],
-                                                );
-                                              });
-                                        },
-                                        // padding: EdgeInsets.fromLTRB(0, 0, 5, 10),
-                                      ),
-                                    ],
-                                  ),
-                                  child: characterItem(
-                                      context, index, cubit.charModel[index])),
-                              if (index ==
-                                  CharacterCubit.get(context).charSize! - 1)
-                                SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.15,
-                                )
-                            ],
+                                                  );
+                                                });
+                                          },
+                                          // padding: EdgeInsets.fromLTRB(0, 0, 5, 10),
+                                        ),
+                                      ],
+                                    ),
+                                    child: characterItem(
+                                        context, index, cubit.charModel[index])),
+                                if (index ==
+                                    CharacterCubit.get(context).charSize! - 1)
+                                  SizedBox(
+                                    height:
+                                        MediaQuery.of(context).size.height * 0.15,
+                                  )
+                              ],
+                            ),
+                            separatorBuilder: (context, index) => SizedBox(
+                              height: screenHeight * 0.025,
+                            ),
+                            itemCount: cubit.charSize!,
                           ),
-                          separatorBuilder: (context, index) => SizedBox(
-                            height: screenHeight * 0.025,
-                          ),
-                          itemCount: cubit.charSize!,
                         ),
                       ),
                       fallback: (context) => Center(
@@ -420,8 +433,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         child: CircleAvatar(
                           backgroundColor: defaultAvatar,
                           radius: MediaQuery.of(context).size.height * 0.038,
-                          backgroundImage: NetworkImage(
-                            // 'https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?size=338&ext=jpg&uid=R61521309&ga=GA1.2.1730070774.1650502465',
+                          backgroundImage: CachedNetworkImageProvider(
                             '${charModel.image}',
                           ),
                         ),
